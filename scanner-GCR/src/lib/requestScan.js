@@ -5,6 +5,7 @@ export const requestScan = async (url, useGlobalPuppeteer = false) => {
   try {
     const browser = !useGlobalPuppeteer
       ? await puppeteer.launch({
+          headless:true,
           args: ["--no-sandbox", "--disable-setuid-sandbox"]
         })
       : useGlobalPuppeteer.browser;
@@ -14,22 +15,14 @@ export const requestScan = async (url, useGlobalPuppeteer = false) => {
       : useGlobalPuppeteer.page;
 
     await page.setBypassCSP(true);
-
     await page.goto(url);
-
     const results = await new AxePuppeteer(page).analyze();
 
     await page.close();
     await browser.close();
 
-    if (results.violations.length > 0) {
-      //console.log("Failure: " + results.violations.length + " violations:");
-      //console.log(results.violations);
-      return {statusCode: 1, violations: results.violations}; //failure
-    } else {
-      //console.log("Passed with 0 violations");
-      return {statusCode: 0, violations: []}; //success
-    }
+    // log results to database
+    return {violations: results.violations};
   } catch (e) {
     console.log("something happened");
     console.log(e.message);

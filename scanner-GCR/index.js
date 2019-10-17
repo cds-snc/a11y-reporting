@@ -7,14 +7,10 @@ const path = require("path");
 app.get('/', (req, res) => {
   (async() => {
     console.log("params: " + JSON.stringify(req.query));
-    let filePath = req.query.url;
-    let result = await handle(filePath);
-    if (result.statusCode == 0) {
-      console.log("Passed");
-      res.send(result);
-    } else {
-      res.send(result);
-    }
+    let baseURL = req.query.baseURL,
+      slug = req.query.slug;
+    let result = await handle(baseURL, slug);
+    res.send(result);
   })();
 
 });
