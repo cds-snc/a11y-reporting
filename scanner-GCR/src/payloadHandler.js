@@ -5,7 +5,6 @@ const { scannedModel } = require("./lib/model");
 
 export const handle = async (baseURL, slug) => {
   const result = await requestScan(baseURL + slug);
-
   // if result, else return error
   if (result) {
     try {
@@ -15,13 +14,13 @@ export const handle = async (baseURL, slug) => {
       db.on('error', err => {
         console.error(err);
       });
-      db.once('open', async function() {
+      return await db.once('open', async function() {
         try {
           // write to DB
           const timestamp = new Date();
           let scannedPage = new scannedModel({baseURL: baseURL, slug: slug, violations: result.violations, timeStamp: timestamp})
           scannedPage = await scannedPage.save();
-          return scannedPage;
+          return true;
         } catch (e) {
           console.log(e.message);
           return false;
@@ -29,7 +28,10 @@ export const handle = async (baseURL, slug) => {
       });
     } catch(error) {
       console.log(error);
+      return false;
     }
+  } else{
+    console.log("Shouldn't see this..");
+    return false;
   }
-  return "No scan";
 };

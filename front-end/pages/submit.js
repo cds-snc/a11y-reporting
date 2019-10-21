@@ -15,7 +15,6 @@ export class Submit extends React.Component {
     let name = "slug" + this.state.pagesToScan.length;
     let newPage = [{name: name, hint:"", status: ""}];
     this.setState({pagesToScan: this.state.pagesToScan.concat(newPage)});
-    console.log(this.state.pagesToScan);
   }
   submitScans = async (e) => {
     e.preventDefault();
@@ -23,25 +22,24 @@ export class Submit extends React.Component {
     //submit requests to gcloud - 1 per slug
     let slugs = this.state.slugs;
     for (let slug in slugs) {
-      let fetchurl = "https://a11y-reporting-hanuv4jn2q-ue.a.run.app/?baseURL=" + this.state.baseURL + "&slug=" + slugs[slug];
+      let fetchurl = "https://a11y-reporting-hanuv4jn2q-ue.a.run.app/submit?baseURL=" + this.state.baseURL + "&slug=" + slugs[slug];
 
       // add loading indicator
       let pages = this.state.pagesToScan;
       pages[slug].status = "sent";
       this.setState({pagesToScan: pages});
 
-      console.log("fetching from: " + fetchurl);
-      fetch(fetchurl, {
-        mode:'no-cors'
-      })
-        .then(function(response) {
-          console.log(response);
-          return response.json();
-        }).then(function(data) {
+      fetch(fetchurl)
+        .then(response => {
+          console.log(response.ok)
+          return response;
+        }).then(data => {
           // add success indicator
-          pages[slug].status = "success";
+          if (data.status == 200)
+            pages[slug].status = "success";
+          else
+            pages[slug].status ="error";
           this.setState({pagesToScan: pages});
-          console.log("response received: " + data);
         }).catch(err => {
           // add failure indicator
           pages[slug].status ="error";

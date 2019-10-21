@@ -11,7 +11,11 @@ app.get('/submit', (req, res) => {
     let baseURL = req.query.baseURL,
       slug = req.query.slug;
     let result = await handle(baseURL, slug);
-    res.send(result);
+    res.set('Access-Control-Allow-Origin', '*');
+    if (result)
+      res.status(200).send("success");
+    else
+      res.status(400).send("bad request");
   })();
 
 });
