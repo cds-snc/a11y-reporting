@@ -4,7 +4,8 @@ const app = express();
 const handle = require("./src/payloadHandler").handle;
 const path = require("path");
 
-app.get('/', (req, res) => {
+// submit scans endpoint
+app.get('/submit', (req, res) => {
   (async() => {
     console.log("params: " + JSON.stringify(req.query));
     let baseURL = req.query.baseURL,
@@ -14,6 +15,8 @@ app.get('/', (req, res) => {
   })();
 
 });
+
+// get data endpoint(s)
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
