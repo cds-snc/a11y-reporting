@@ -2,15 +2,17 @@ require = require("esm")(module); // eslint-disable-line no-global-assign
 const express = require('express');
 const app = express();
 const handle = require("./src/payloadHandler").handle;
+const getBaseURLs = require("./src/getData").getBaseURLs;
+const {getDB, initDB} = require("./src/db");
 const path = require("path");
 
 // submit scans endpoint
 app.get('/submit', (req, res) => {
-  (async() => {
+  (async () => {
     console.log("params: " + JSON.stringify(req.query));
-    let baseURL = req.query.baseURL,
+    const baseURL = req.query.baseURL,
       slug = req.query.slug;
-    let result = await handle(baseURL, slug);
+    const result = await handle(baseURL, slug);
     res.set('Access-Control-Allow-Origin', '*');
     if (result)
       res.status(200).send("success");
@@ -21,8 +23,26 @@ app.get('/submit', (req, res) => {
 });
 
 // get data endpoint(s)
+app.get('/getbaseURLs', (req, res) => {
+  (async () => {
+    const baseURLs = await getBaseURLs();
+    res.set('Access-Control-Allow-Origin', '*');
+    if (baseURLs) {
+      res.status(200).send(baseURLs);
+    } else {
+      res.status(400).send("error fetching data");
+    }
+  })();
+});
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log('Axe Scanner listening on port ', port);
+
+initDB(function(err) {
+  app.listen(port, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('Axe Scanner listening on port ', port);
+    }
+  });
 });
