@@ -4,7 +4,6 @@ import TextInput from "../components/textInput";
 export class Submit extends React.Component {
   constructor(props) {
     super(props);
-    let statuses = [""];
     this.state = {
       baseURL: "",
       pagesToScan: [{name: "slug0", hint:"Examples: '/' for the home page, '/team' for a subpage", status: ""}],

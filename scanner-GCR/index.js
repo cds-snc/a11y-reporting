@@ -2,7 +2,7 @@ require = require("esm")(module); // eslint-disable-line no-global-assign
 const express = require('express');
 const app = express();
 const handle = require("./src/payloadHandler").handle;
-const getBaseURLs = require("./src/getData").getBaseURLs;
+const {getBaseURLs, getScansForURL} = require("./src/getData");
 const {getDB, initDB} = require("./src/db");
 const path = require("path");
 
@@ -32,6 +32,20 @@ app.get('/getbaseURLs', (req, res) => {
     } else {
       res.status(400).send("error fetching data");
     }
+  })();
+});
+
+app.get('/getScansForURL', (req, res) => {
+  (async () => {
+    console.log("params: " + JSON.stringify(req.query));
+    const baseURL = req.query.baseURL;
+    const scans = await getScansForURL(baseURL);
+
+    res.set('Access-Control-Allow-Origin', '*');
+    if (scans)
+      res.status(200).send(scans);
+    else
+      res.status(400).send("bad request");
   })();
 });
 
