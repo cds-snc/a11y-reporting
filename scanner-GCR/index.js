@@ -2,7 +2,12 @@ require = require("esm")(module); // eslint-disable-line no-global-assign
 const express = require('express');
 const app = express();
 const handle = require("./src/payloadHandler").handle;
-const {getBaseURLs, getScansForURL} = require("./src/getData");
+const {
+  getBaseURLs,
+  getScansForURL,
+  getDistinctDates,
+  getScansForDate
+} = require("./src/getData");
 const {getDB, initDB} = require("./src/db");
 const path = require("path");
 
@@ -48,6 +53,34 @@ app.get('/getScansForURL', (req, res) => {
       res.status(400).send("bad request");
   })();
 });
+
+app.get('/getDistinctDates', (req, res) => {
+  (async () => {
+    console.log("params: " + JSON.stringify(req.query));
+    const baseURL = req.query.baseURL;
+    const dates = await getDistinctDates(baseURL);
+
+    res.set('Access-Control-Allow-Origin', '*');
+    if (dates)
+      res.status(200).send(dates);
+    else
+      res.status(400).send("bad request");
+  })();
+});
+
+app.get('/getScansForDate', (req, res) => {
+  (async () => {
+    console.log("params: " + JSON.stringify(req.query));
+    const baseURL = req.query.baseURL,
+      date = req.query.date;
+    const scans = await getScansForDate(baseURL, date);
+    res.set('Access-Control-Allow-Origin', '*');
+    if (scans)
+      res.status(200).send(scans);
+    else
+      res.status(400).send("bad request");
+  })();
+})
 
 const port = process.env.PORT || 8080;
 

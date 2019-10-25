@@ -15,8 +15,53 @@ export const getBaseURLs = async () => {
 };
 
 export const getScansForURL = async (baseURL) => {
-  console.log("starting query")
-  const result = await scannedModel.find({baseURL: baseURL})
-  console.log("Result: " + JSON.stringify(result));
+  const result = await scannedModel.find({baseURL: baseURL});
+  return result;
+}
+
+export const getScansForDate = async (baseURL, date) => {
+  const d = new Date(date);
+  const result = await scannedModel.find({
+    baseURL: baseURL,
+    timeStamp: {
+      $lte: new Date(d.getTime() + 1000*86400),
+      $gte: d
+    }
+  });
+  return result;
+}
+
+export const getDistinctDates = async (baseURL) => {
+  const result = await scannedModel.aggregate(
+    [
+      {
+        $match: {baseURL: baseURL}
+      },{
+        $project: {
+          year: {"$year": "$timeStamp" },
+          month: {"$month": "$timeStamp"},
+          day: {"$dayOfMonth": "$timeStamp"}
+        }
+      },{
+        $group: {
+          _id: {
+            year: '$year',
+            month: '$month',
+            dayOfMonth: '$day'
+          },
+          count: {
+            $sum: 1
+          }
+        }
+      }, {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1,
+          "_id.dayOfMonth": 1
+        }
+      }
+    ]
+  );
+  console.log(result);
   return result;
 }

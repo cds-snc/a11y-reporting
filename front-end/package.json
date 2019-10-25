@@ -5,6 +5,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "d3": "^5.12.0",
     "next": "^9.1.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
