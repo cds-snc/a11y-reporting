@@ -4,9 +4,9 @@ const app = express();
 const handle = require("./src/payloadHandler").handle;
 const {
   getBaseURLs,
-  getScansForURL,
+  getScans,
   getDistinctDates,
-  getScansForDate
+  getDistinctSlugs,
 } = require("./src/getData");
 const {getDB, initDB} = require("./src/db");
 const path = require("path");
@@ -40,11 +40,13 @@ app.get('/getbaseURLs', (req, res) => {
   })();
 });
 
-app.get('/getScansForURL', (req, res) => {
+app.get('/getScans', (req, res) => {
   (async () => {
     console.log("params: " + JSON.stringify(req.query));
-    const baseURL = req.query.baseURL;
-    const scans = await getScansForURL(baseURL);
+    const baseURL = req.query.baseURL,
+      slug = req.query.slug,
+      date = req.query.date;
+    const scans = await getScans(baseURL, slug, date);
 
     res.set('Access-Control-Allow-Origin', '*');
     if (scans)
@@ -68,19 +70,19 @@ app.get('/getDistinctDates', (req, res) => {
   })();
 });
 
-app.get('/getScansForDate', (req, res) => {
+app.get('/getDistinctSlugs', (req, res) => {
   (async () => {
     console.log("params: " + JSON.stringify(req.query));
-    const baseURL = req.query.baseURL,
-      date = req.query.date;
-    const scans = await getScansForDate(baseURL, date);
+    const baseURL = req.query.baseURL;
+    const slugs = await getDistinctSlugs(baseURL);
+
     res.set('Access-Control-Allow-Origin', '*');
-    if (scans)
-      res.status(200).send(scans);
+    if (slugs)
+      res.status(200).send(slugs);
     else
       res.status(400).send("bad request");
   })();
-})
+});
 
 const port = process.env.PORT || 8080;
 

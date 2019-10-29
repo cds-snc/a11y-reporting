@@ -14,19 +14,28 @@ export const getBaseURLs = async () => {
   return result;
 };
 
-export const getScansForURL = async (baseURL) => {
-  const result = await scannedModel.find({baseURL: baseURL});
-  return result;
-}
-
-export const getScansForDate = async (baseURL, date) => {
-  const d = new Date(date);
-  const result = await scannedModel.find({
-    baseURL: baseURL,
-    timeStamp: {
+export const getScans = async (baseURL, slug, date) => {
+  let query = {baseURL: baseURL};
+  if (slug)
+    query.slug = slug;
+  if (date) {
+    let d = new Date(date);
+    query.timeStamp = {
       $lte: new Date(d.getTime() + 1000*86400),
       $gte: d
     }
+  }
+  const result = await scannedModel.find(query);
+  return result;
+}
+
+export const getDistinctSlugs = async(baseURL) => {
+  const result = await scannedModel.find({baseURL: baseURL}).distinct("slug", function(err, slugs) {
+    if (err) {
+      console.error(err);
+      return [];
+    }
+    return slugs;
   });
   return result;
 }

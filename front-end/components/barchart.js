@@ -13,8 +13,10 @@ export class BarChart extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.data.counts)
+    if (this.props.data.counts) {
       this.drawChart();
+    }
+      
   }
 
   selectDate = (d, i) => {
@@ -25,17 +27,6 @@ export class BarChart extends React.Component {
     const svg = this.state.svg,
       data = this.props.data;
 
-    svg.selectAll("rect")
-      .data(data.counts)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => i * 105)
-      .attr("y", (d, i) => 300 - 10 * d)
-      .attr("width", 100)
-      .attr("height", (d, i) => d * 10)
-      .attr("fill", "blue")
-      .on("click", this.selectDate);
-
     svg.selectAll("text")
       .data(data.dates)
       .enter()
@@ -43,6 +34,26 @@ export class BarChart extends React.Component {
       .text((d) => d)
       .attr("x", (d, i) => i * 105 + 15)
       .attr("y", 295);
+    
+    const that = this;
+
+    svg.selectAll("rect")
+      .data(data.counts)
+      .enter()
+      .append("rect")
+        .attr("x", (d, i) => i * 105)
+        .attr("y", (d, i) => 275 - 10 * d)
+        .attr("width", 100)
+        .attr("height", (d, i) => d * 10)
+        .attr("fill", (d, i) => {
+          if(that.props.selectedDate == that.props.data.dates[i]) {
+            return "green";
+          }
+          return "blue"
+        })
+        .on("click", this.selectDate)
+        .append("text")
+          .text("test");
 
   }
 
