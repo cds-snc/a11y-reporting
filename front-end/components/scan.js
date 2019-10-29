@@ -19,12 +19,25 @@ export class Scan extends React.Component {
       list-style-type:none;
       padding-left: 0;
     `;
-    const ToggleExpanded = styled.div`
-      margin: 1em 0;
-      background-color: pink;
+    const ToggleExpanded = styled.button`
+      padding: 0.5em;
+      margin-bottom: 0.5em;
+      background-color: #b8def5;
+      border-radius: 1em;
+      cursor: pointer;
+      display: block;
+      font-size: 16px;
+      width: 100%;
     `;
+    const ScanWrapper = styled.div`
+      font-family: sans-serif;
+      padding: 0 1em;
+      border: thin solid grey;
+      margin-bottom: 0.3em;
+    `;
+
     return (
-      <div>
+      <ScanWrapper>
         <h3>Page Scanned: {scan.baseURL}{scan.slug}</h3>
         <span>Scanned at: {scan.timeStamp}</span>
         <ToggleExpanded onClick={this.toggleViolationsExpanded}>Axe Violations Found: {scan.violations.length}</ToggleExpanded>
@@ -36,7 +49,7 @@ export class Scan extends React.Component {
           </ViolationList>
         ): ""}
 
-      </div>
+      </ScanWrapper>
     )
   }
 };

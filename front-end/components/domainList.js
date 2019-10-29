@@ -11,6 +11,7 @@ export class DomainList extends React.Component {
     const Wrapper = styled.div`
       display: inline-block;
       vertical-align: top;
+      font-family: sans-serif;
     `;
     const List = styled.ul`
       list-style-type: none;

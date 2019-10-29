@@ -52,8 +52,9 @@ export class BarChart extends React.Component {
           return "blue"
         })
         .on("click", this.selectDate)
-        .append("text")
-          .text("test");
+        .on("mouseover", function(d) {
+            d3.select(this).style("cursor", "pointer"); 
+          });
 
   }
 

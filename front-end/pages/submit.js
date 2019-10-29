@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import TextInput from "../components/textInput";
 
 export class Submit extends React.Component {
@@ -58,8 +59,11 @@ export class Submit extends React.Component {
     this.setState({slugs: newSlugs});
   }
   render() {
+    const Wrapper = styled.div`
+      font-family: sans-serif;
+    `;
     return (
-      <div>
+      <Wrapper>
         <h1>Submit pages for a11y scanning:</h1>
   
         <div>Welcome to Next.js!</div>
@@ -79,7 +83,7 @@ export class Submit extends React.Component {
 
           <input type="submit" value="Submit pages to be scanned" />
         </form>
-      </div>
+      </Wrapper>
     )
   }
 }

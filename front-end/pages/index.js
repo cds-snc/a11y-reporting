@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import DomainList from "../components/domainList";
 import DataView from "../components/dataView";
 
@@ -34,9 +35,13 @@ export class Index extends React.Component {
   }
 
   render() {
+    const Header = styled.h1`
+      font-family: sans-serif;
+    `;
+
     return (
       <div>
-        <h1>A11y Reporting</h1>
+        <Header>A11y Reporting</Header>
         <DomainList
           domains={this.state.domains}
           selected={this.state.selectedDomain}

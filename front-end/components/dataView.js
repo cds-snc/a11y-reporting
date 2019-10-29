@@ -106,7 +106,19 @@ export class DataView extends React.Component {
     const Wrapper = styled.div`
       display: inline-block;
       max-width: 700px;
-      margin-left: 2em
+      margin-left: 2em;
+      font-family: sans-serif;
+    `;
+
+    const Button = styled.button`
+      font-size: 16px;
+      padding: 0.5em;
+      margin: 0.5em;
+      cursor: pointer;
+    `;
+
+    const SelectedButton = styled(Button)`
+      background-color: grey;
     `;
 
     return (
@@ -114,18 +126,24 @@ export class DataView extends React.Component {
         <div id="dateChart">
           <h2>Scans for {this.props.domain} by Date:</h2>
           <BarChart data={this.state.dates} onSelectDate={this.onSelectedDateChange} selectedDate={this.state.date}></BarChart>
-          <div>
-            <h3>Filter by scanned page:</h3>
-            {this.state.slugs.map(slug => (
-              <button onClick={this.onFilterChange} key={slug} value={slug}>
-                {slug}
-              </button>
-            ))}
-          </div>
-          <button onClick={this.clearFilters}>Clear Filters</button>
         </div>
         <div>
-          <h4>{this.state.data.length} scans found:</h4>
+          <div>
+            <h3>Filter by scanned page:</h3>
+            {this.state.slugs.map(slug => (this.state.slug == slug) ? (
+              <SelectedButton onClick={this.onFilterChange} key={slug} value={slug}>
+                {slug}
+              </SelectedButton>
+            ) : (
+              <Button onClick={this.onFilterChange} key={slug} value={slug}>
+                {slug}
+              </Button>
+            ))}
+          </div>
+          <Button onClick={this.clearFilters}>Clear Filters</Button>
+        </div>
+        <div>
+          <h3>{this.state.data.length} scans found:</h3>
           {this.state.data.map(scan => (
             <div key={scan._id}>
               <Scan scan={scan}></Scan>
