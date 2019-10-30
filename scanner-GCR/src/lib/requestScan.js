@@ -1,5 +1,6 @@
 const { AxePuppeteer } = require('axe-puppeteer');
 const puppeteer = require('puppeteer');
+const Apify = require('apify');
 
 export const requestScan = async (url, useGlobalPuppeteer = false) => {
   try {
@@ -28,4 +29,47 @@ export const requestScan = async (url, useGlobalPuppeteer = false) => {
     console.log(e.message);
     return false;
   }
+};
+
+export const crawlScan = async (url) => {
+  const requestQueue = await Apify.openRequestQueue();
+  await requestQueue.addRequest({ url: url });
+
+  const crawler =  new Apify.PuppeteerCrawler({
+    requestQueue,
+    launchPuppeteerOptions: {
+      headless:true,
+      args: ["--disable-setuid-sandbox"]
+    },
+    maxConcurrency: 1,
+    handlePageFunction: async ({request, page}) => {
+      console.log("Processing " + page.url);
+
+      await Apify.pushData({
+        title: await page.title(),
+        url: request.url,
+        succeeded: true,
+      });
+
+      const links = await Apify.utils.enqueueLinks({
+        page,
+        requestQueue
+      });
+      if (links.length === 0)
+        console.log(`${request.url} is the last page!`);
+    },
+    handleFailedRequestFunction: async ({request}) => {
+      await Apify.pushData({
+        url: request.url,
+        succeeded: false,
+        errors: request.errorMessages,
+      });
+    }
+  });
+  if (!crawler) {
+    console.error("NO CRAWLER")
+  }
+
+  await crawler.run();
+  console.log("crawler finished");
 };

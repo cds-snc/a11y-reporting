@@ -2,14 +2,14 @@ require = require("esm")(module); // eslint-disable-line no-global-assign
 const express = require('express');
 const app = express();
 const handle = require("./src/payloadHandler").handle;
+const {crawlScan} = require("./src/lib/requestScan");
 const {
   getBaseURLs,
   getScans,
   getDistinctDates,
   getDistinctSlugs,
 } = require("./src/getData");
-const {getDB, initDB} = require("./src/db");
-const path = require("path");
+const {initDB} = require("./src/db");
 
 // submit scans endpoint
 app.get('/submit', (req, res) => {
@@ -26,6 +26,15 @@ app.get('/submit', (req, res) => {
   })();
 
 });
+
+app.get('/crawl', (req, res) => {
+  (async () => {
+    const url = req.query.url;
+    crawlScan(url);
+    res.set('Access-Control-Allow-Origin', '*');
+    res.status(200).send("Crawl submitted");
+  })();
+})
 
 // get data endpoint(s)
 app.get('/getbaseURLs', (req, res) => {
