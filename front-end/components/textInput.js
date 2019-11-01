@@ -1,6 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
+const TextBox = styled.input`
+  width: 300px;
+  height: 2em;
+  `;
+const Wrapper = styled.div`
+  margin: 0.5em;
+  `;
+
 export class TextInput extends React.Component {
   render() {
     const {name, label, hint, onchange, status} = this.props;
@@ -25,13 +33,26 @@ export class TextInput extends React.Component {
       background-color: ${props => props.iconColour || "grey"};
     `;
 
+    let Label = styled.label`
+      width: 120px;
+      padding-left: 1em;
+      display: inline-block;
+      font-family: sans-serif;
+    `;
+
+    let Hint = styled.span`
+      margin-left: 1em;
+      color: grey;
+      font-family: sans-serif;
+    `;
+
     return (
-      <div>
+      <Wrapper>
         <StatusIcon iconColour={iconColour}></StatusIcon>
-        <label htmlFor={name}>{label}</label>
-        <input type="text" name={name} id="baseURL" onChange={onchange}></input>
-        {hintEle}
-      </div>
+        <Label htmlFor={name}>{label}</Label>
+        <TextBox type="text" name={name} id="baseURL" onChange={onchange}></TextBox>
+        <Hint>{hint ? hint : ""}</Hint>
+      </Wrapper>
     )
   }
 }
