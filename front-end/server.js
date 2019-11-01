@@ -16,14 +16,14 @@ app.prepare()
     .then(() => {
         const server = express()
 
-        const port = process.env.PORT || 3000;
+        server.set('port', (process.env.PORT || 3000));
 
         server.get('*', (req, res) => {
             return handle(req, res)
         })
 
-        server.listen(port, (err) => {
+        server.listen(server.get('port'), (err) => {
             if (err) throw err
-            console.log(`> Ready on http://localhost:${port}`)
+            console.log(`> Ready on http://localhost:${server.get('port')}`)
         })
     })
