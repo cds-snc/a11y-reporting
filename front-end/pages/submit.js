@@ -59,15 +59,6 @@ export class Submit extends React.Component {
     this.setState({slugs: newSlugs});
   }
   render() {
-    const Button = styled.button`
-      height: 2em;
-      font-size: 16px;
-      margin: 0.5em;
-    `;
-    const SubmitButton = styled.input`
-      font-size: 16px;
-      margin: 0.5em;
-    `;
     return (
       <div>
         <h1>Submit pages for a11y scanning:</h1>
@@ -85,9 +76,9 @@ export class Submit extends React.Component {
           {this.state.pagesToScan.map(page => (
             <TextInput key={page.name} name={page.name} label="Page Slug:" hint={page.hint} onchange={this.updateSlug} status={page.status}></TextInput>
           ))}
-          <Button type="button" onClick={this.addPage}>Add another Page</Button>
+          <button type="button" onClick={this.addPage}>Add another Page</button>
 
-          <SubmitButton type="submit" value="Submit pages to be scanned" />
+          <input type="submit" value="Submit pages to be scanned" />
         </form>
       </div>
     )
