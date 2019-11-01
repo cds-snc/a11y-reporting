@@ -22,7 +22,7 @@ export class Submit extends React.Component {
     //submit requests to gcloud - 1 per slug
     let slugs = this.state.slugs;
     for (let slug in slugs) {
-      let fetchurl = "https://a11y-reporting-hanuv4jn2q-ue.a.run.app/submit?baseURL=" + this.state.baseURL + "&slug=" + slugs[slug];
+      let fetchurl = process.env.API_URL + "/submit?baseURL=" + this.state.baseURL + "&slug=" + slugs[slug];
 
       // add loading indicator
       let pages = this.state.pagesToScan;

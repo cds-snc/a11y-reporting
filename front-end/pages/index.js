@@ -7,7 +7,7 @@ export class Index extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      api_url: "https://a11y-reporting-hanuv4jn2q-ue.a.run.app",
+      api_url: process.env.API_URL,
       domains: [],
       selectedDomain: ""
     }
@@ -41,7 +41,7 @@ export class Index extends React.Component {
 
     return (
       <div>
-        <Header>A11y Reporting</Header>
+        <Header>A11y Report</Header>
         <DomainList
           domains={this.state.domains}
           selected={this.state.selectedDomain}
