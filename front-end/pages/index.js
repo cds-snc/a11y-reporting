@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import DomainList from "../components/domainList";
 import DataView from "../components/dataView";
+import Head from 'next/head'
 
 export class Index extends React.Component {
   constructor(props) {
@@ -41,6 +42,9 @@ export class Index extends React.Component {
 
     return (
       <div>
+        <Head>
+          <title>A11Y Report</title>
+        </Head>
         <Header>A11y Report</Header>
         <DomainList
           domains={this.state.domains}

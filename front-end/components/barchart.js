@@ -27,13 +27,21 @@ export class BarChart extends React.Component {
     const svg = this.state.svg,
       data = this.props.data;
 
+    const w = 700,
+      h = 300,
+      n = data.dates.length;
+
     svg.selectAll("text")
       .data(data.dates)
       .enter()
       .append("text")
-      .text((d) => d)
-      .attr("x", (d, i) => i * 105 + 15)
-      .attr("y", 295);
+        .text((d) => d)
+        .attr("transform", function(d,i){
+          var xText = i * w/n;
+          var yText = 300;
+          console.log(xText)
+          return "translate(" + xText + "," + yText + ") rotate(-50)";
+        });
     
     const that = this;
 
@@ -41,9 +49,9 @@ export class BarChart extends React.Component {
       .data(data.counts)
       .enter()
       .append("rect")
-        .attr("x", (d, i) => i * 105)
-        .attr("y", (d, i) => 275 - 10 * d)
-        .attr("width", 100)
+        .attr("x", (d, i) => i * w/n)
+        .attr("y", (d, i) => 225 - 10 * d)
+        .attr("width", w/n - 10)
         .attr("height", (d, i) => d * 10)
         .attr("fill", (d, i) => {
           if(that.props.selectedDate == that.props.data.dates[i]) {
