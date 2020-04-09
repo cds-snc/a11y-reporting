@@ -9,7 +9,7 @@
   "author": "Bethany Dunfield",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.4.2",
+    "@babel/runtime": "^7.8.7",
     "axe-puppeteer": "1.0.0",
     "esm": "^3.2.22",
     "express": "^4.16.4",
