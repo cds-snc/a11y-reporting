@@ -14,7 +14,7 @@
     "esm": "^3.2.22",
     "express": "^4.16.4",
     "minimist": "^1.2.0",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.11.7",
     "puppeteer": "^1.14.0"
   }
 }
